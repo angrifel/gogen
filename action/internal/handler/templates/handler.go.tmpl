@@ -1,0 +1,27 @@
+package {{.Package}}
+
+import (
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+)
+
+type hndlr struct {
+	chi.Router
+	options
+}
+
+var _ http.Handler = &hndlr{}
+
+func Handler(opts ...Option) http.Handler {
+	resolvedOptions := defaultOptions()
+	for _, opt := range opts {
+		opt.apply(resolvedOptions)
+	}
+
+	sanitizeOptions(resolvedOptions)
+
+	h := &hndlr{chi.NewRouter(), *resolvedOptions}
+
+	return h
+}

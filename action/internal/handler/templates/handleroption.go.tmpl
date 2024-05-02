@@ -1,0 +1,17 @@
+package {{.Package}}
+
+type (
+	options struct {
+	}
+	Option interface {
+		apply(opts *options)
+	}
+	funcOption func(opts *options)
+)
+
+var _ Option = (funcOption)(nil)
+
+func (fo funcOption) apply(opts *options) { fo(opts) }
+
+func defaultOptions() *options      { return &options{} }
+func sanitizeOptions(opts *options) {}
